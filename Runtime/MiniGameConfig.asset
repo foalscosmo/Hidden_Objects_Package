@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be96c86d337b413a9883ba842490e1dc, type: 3}
   m_Name: MiniGameConfig
   m_EditorClassIdentifier: 
-  MiniGameName: Hidden_Objects
-  Version: 0.1.0
+  MiniGameName: hidden_objects
+  Version: 0.1.1
   Url: https://pub-153ea913fa244814a9a5324e4f5cd8df.r2.dev
   CustomRenderPipelineAsset: {fileID: 11400000, guid: acc9a345c97fc43e6b51dc7a633c9f20, type: 2}

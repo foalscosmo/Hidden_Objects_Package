@@ -2,6 +2,7 @@ using System.Collections;
 using com.appidea.MiniGamePlatform.CommunicationAPI;
 using UnityEngine;
 using UnityEngine.InputSystem.EnhancedTouch;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
     {
@@ -10,6 +11,7 @@ public class GameManager : MonoBehaviour
         [SerializeField] private SpaceManager spaceManager;
         [SerializeField] private DownPanel lastPanel;
         [SerializeField] private int levelIndex;
+        [SerializeField] private Button exitButton;
         private BaseMiniGameEntryPoint _entryPoint;
 
         private void OnEnable()
@@ -31,6 +33,7 @@ public class GameManager : MonoBehaviour
         private void Awake()
         {
             SetLevel();
+            exitButton.onClick.AddListener(SetFinishOnButton);
         }
 
         private void SetLevel()
@@ -66,6 +69,11 @@ public class GameManager : MonoBehaviour
         private void SetFinishForPackage()
         {
             StartCoroutine(FinishAfterFireWorks());
+        }
+
+        private void SetFinishOnButton()
+        {
+            _entryPoint.InvokeGameFinished();
         }
 
         private IEnumerator FinishAfterFireWorks()
