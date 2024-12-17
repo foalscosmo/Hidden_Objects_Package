@@ -11,11 +11,11 @@ public class HiddenObjectEntryPoint : BaseMiniGameEntryPoint
     {
         var gameManager = Instantiate(gamePrefab);
         gameManager.GetComponent<GameManager>().SetEntryPoint(this);
-        throw new System.NotImplementedException();
+        return Task.CompletedTask;
     }
 
     protected override Task UnloadInternal()
     {
-        throw new System.NotImplementedException();
+        return Task.CompletedTask;
     }
 }
