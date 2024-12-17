@@ -1,8 +1,9 @@
 using System.Collections;
 using com.appidea.MiniGamePlatform.CommunicationAPI;
 using UnityEngine;
+using UnityEngine.InputSystem.EnhancedTouch;
 
-    public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviour
     {
         [SerializeField] private BedroomManager bedroomManager;
         [SerializeField] private GardenManager gardenManager;
@@ -13,6 +14,7 @@ using UnityEngine;
 
         private void OnEnable()
         {
+            TouchSimulation.Enable();
             bedroomManager.OnBedroomFinished += SetLevel;
             gardenManager.OnGardenFinished += SetLevel;
             spaceManager.OnSpaceFinished += SetLevel;
@@ -20,6 +22,7 @@ using UnityEngine;
 
         private void OnDisable()
         {
+            TouchSimulation.Disable();
             bedroomManager.OnBedroomFinished -= SetLevel;
             gardenManager.OnGardenFinished -= SetLevel;
             spaceManager.OnSpaceFinished -= SetLevel;
