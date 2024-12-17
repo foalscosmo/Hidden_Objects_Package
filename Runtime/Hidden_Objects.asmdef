@@ -1,0 +1,19 @@
+{
+    "name": "com.appidea.MiniGamePlatform.Hidden_Objects",
+    "rootNamespace": "com.appidea.MiniGamePlatform.Hidden_Objects",
+    "references": [
+        "com.appidea.MiniGamePlatform.CommunicationAPI",
+        "Unity.Addressables",
+        "Unity.Mathematics",
+        "Unity.InputSystem"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
