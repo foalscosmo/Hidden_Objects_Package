@@ -1,6 +1,6 @@
 {
   "name": "com.appidea.minigames.YOUR_MINI_GAME_NAME (in lower case only)",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "displayName": "Your mini game package name",
   "description": "Your mini game description",
   "dependencies": {

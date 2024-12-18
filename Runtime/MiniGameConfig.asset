@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: MiniGameConfig
   m_EditorClassIdentifier: 
   MiniGameName: hidden_objects
-  Version: 0.1.0
+  Version: 0.1.1
   Url: https://pub-153ea913fa244814a9a5324e4f5cd8df.r2.dev
   CustomRenderPipelineAsset: {fileID: 11400000, guid: acc9a345c97fc43e6b51dc7a633c9f20, type: 2}
