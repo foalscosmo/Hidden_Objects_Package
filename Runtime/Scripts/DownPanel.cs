@@ -6,63 +6,66 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DownPanel : MonoBehaviour
+namespace com.appidea.MiniGamePlatform.Hidden_Objects.Hidden_Objects.Runtime.Scripts
 {
-    [SerializeField] private TouchObject touchObject;
-    [SerializeField] private List<Image> downPanelObjects = new();
-    [SerializeField] private int correctAmountCounter;
-    [SerializeField] private GameObject checkContainer;
-    [SerializeField] private GameObject checkPrefab;
-    [SerializeField] private List<GameObject> checks = new();
-    public event Action OnMaxObjectAnswered;
-    public event Action OnCurrentLevelFinish;
-    private void OnEnable()
+    public class DownPanel : MonoBehaviour
     {
-        touchObject.OnCorrectInvokeIndex += HandleScaleOfCorrectObject;
-    }
-
-    private void OnDisable()
-    {
-        touchObject.OnCorrectInvokeIndex -= HandleScaleOfCorrectObject;
-    }
-    private void Awake()
-    {
-        for (var index = 0; index < downPanelObjects.Count; index++)
+        [SerializeField] private TouchObject touchObject;
+        [SerializeField] private List<Image> downPanelObjects = new();
+        [SerializeField] private int correctAmountCounter;
+        [SerializeField] private GameObject checkContainer;
+        [SerializeField] private GameObject checkPrefab;
+        [SerializeField] private List<GameObject> checks = new();
+        public event Action OnMaxObjectAnswered;
+        public event Action OnCurrentLevelFinish;
+        private void OnEnable()
         {
-            var checkClone = Instantiate(checkPrefab, downPanelObjects[index].transform.position,
-                quaternion.identity, checkContainer.transform);
-            checks[index] = checkClone;
-            var sr = downPanelObjects[index];
-            var color = sr.color;
-            color.a = 1f;
-            sr.color = color;
+            touchObject.OnCorrectInvokeIndex += HandleScaleOfCorrectObject;
         }
-    }
 
-    private void HandleScaleOfCorrectObject(int index)
-    {
-        correctAmountCounter++;
-        var originalScale = downPanelObjects[index].transform.localScale;
-        downPanelObjects[index].transform.DOScale(originalScale * 1.2f, 0.2f).OnComplete(() =>
+        private void OnDisable()
         {
-            var sr = downPanelObjects[index];
-            var color = sr.color;
-            color.a = 0.5f;
-            sr.color = color;
-            downPanelObjects[index].transform.DOScale(originalScale, 0.2f).OnComplete(() =>
-            { checks[index].SetActive(true); });
-        });
-        if (correctAmountCounter == touchObject.MaxObjectCount)
-        {
-            StartCoroutine(HandleFinishTimer());
+            touchObject.OnCorrectInvokeIndex -= HandleScaleOfCorrectObject;
         }
-    }
+        private void Awake()
+        {
+            for (var index = 0; index < downPanelObjects.Count; index++)
+            {
+                var checkClone = Instantiate(checkPrefab, downPanelObjects[index].transform.position,
+                    quaternion.identity, checkContainer.transform);
+                checks[index] = checkClone;
+                var sr = downPanelObjects[index];
+                var color = sr.color;
+                color.a = 1f;
+                sr.color = color;
+            }
+        }
 
-    private IEnumerator HandleFinishTimer()
-    {
-        yield return new WaitForSecondsRealtime(1f);
-        OnCurrentLevelFinish?.Invoke();
-        yield return new WaitForSecondsRealtime(2f);
-        OnMaxObjectAnswered?.Invoke();
+        private void HandleScaleOfCorrectObject(int index)
+        {
+            correctAmountCounter++;
+            var originalScale = downPanelObjects[index].transform.localScale;
+            downPanelObjects[index].transform.DOScale(originalScale * 1.2f, 0.2f).OnComplete(() =>
+            {
+                var sr = downPanelObjects[index];
+                var color = sr.color;
+                color.a = 0.5f;
+                sr.color = color;
+                downPanelObjects[index].transform.DOScale(originalScale, 0.2f).OnComplete(() =>
+                    { checks[index].SetActive(true); });
+            });
+            if (correctAmountCounter == touchObject.MaxObjectCount)
+            {
+                StartCoroutine(HandleFinishTimer());
+            }
+        }
+
+        private IEnumerator HandleFinishTimer()
+        {
+            yield return new WaitForSecondsRealtime(1f);
+            OnCurrentLevelFinish?.Invoke();
+            yield return new WaitForSecondsRealtime(2f);
+            OnMaxObjectAnswered?.Invoke();
+        }
     }
 }

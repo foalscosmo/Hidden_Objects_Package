@@ -1,23 +1,26 @@
 using System;
 using UnityEngine;
 
-public class SpaceManager : MonoBehaviour
+namespace com.appidea.MiniGamePlatform.Hidden_Objects.Hidden_Objects.Runtime.Scripts
 {
-    [SerializeField] private DownPanel bedroomPanel;
-    public event Action OnSpaceFinished;
+    public class SpaceManager : MonoBehaviour
+    {
+        [SerializeField] private DownPanel bedroomPanel;
+        public event Action OnSpaceFinished;
     
-    private void OnEnable()
-    {
-        bedroomPanel.OnMaxObjectAnswered += HandleBedroomFinished;
-    }
+        private void OnEnable()
+        {
+            bedroomPanel.OnMaxObjectAnswered += HandleBedroomFinished;
+        }
 
-    private void OnDisable()
-    {
-        bedroomPanel.OnMaxObjectAnswered -= HandleBedroomFinished;
-    }
+        private void OnDisable()
+        {
+            bedroomPanel.OnMaxObjectAnswered -= HandleBedroomFinished;
+        }
 
-    private void HandleBedroomFinished()
-    {
-        OnSpaceFinished?.Invoke();
+        private void HandleBedroomFinished()
+        {
+            OnSpaceFinished?.Invoke();
+        }
     }
 }

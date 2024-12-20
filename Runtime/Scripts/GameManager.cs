@@ -4,7 +4,9 @@ using UnityEngine;
 using UnityEngine.InputSystem.EnhancedTouch;
 using UnityEngine.UI;
 
-public class GameManager : MonoBehaviour
+namespace com.appidea.MiniGamePlatform.Hidden_Objects.Hidden_Objects.Runtime.Scripts
+{
+    public class GameManager : MonoBehaviour
     {
         [SerializeField] private BedroomManager bedroomManager;
         [SerializeField] private GardenManager gardenManager;
@@ -82,3 +84,4 @@ public class GameManager : MonoBehaviour
             _entryPoint.InvokeGameFinished();
         }
     }
+}
