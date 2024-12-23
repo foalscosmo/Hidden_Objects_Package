@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using DG.Tweening;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.InputSystem.EnhancedTouch;
 
 namespace com.appidea.MiniGamePlatform.Hidden_Objects.Hidden_Objects.Runtime.Scripts
 {
     public class TouchObject : MonoBehaviour
     {
         private Camera mainCamera;
-        private Finger touchFinger;
         [SerializeField] private List<Transform> targetObjects = new();
         [SerializeField] private List<Sprite> objectSpritesRenderers = new();
         [SerializeField] private List<Transform> clonedPrefabs = new();
@@ -35,65 +33,86 @@ namespace com.appidea.MiniGamePlatform.Hidden_Objects.Hidden_Objects.Runtime.Scr
 
         public List<Transform> ClonePrefabs => clonedPrefabs;
 
-        private void OnEnable()
-        {
-            EnhancedTouchSupport.Enable();
-            UnityEngine.InputSystem.EnhancedTouch.Touch.onFingerDown += HandleFingerDown;
-        }
-
-        private void OnDisable()
-        {
-            UnityEngine.InputSystem.EnhancedTouch.Touch.onFingerDown -= HandleFingerDown;
-            EnhancedTouchSupport.Disable();
-        }
-
         private void Awake()
         {
             mainCamera = Camera.main;
             for (int i = 0; i < targetObjects.Count; i++)
             {
-                var obj = Instantiate(prefabObject, targetObjects[i].transform.position, quaternion.identity,transform);
+                var obj = Instantiate(prefabObject, targetObjects[i].transform.position, quaternion.identity, transform);
                 obj.GetComponent<SpriteRenderer>().sprite = objectSpritesRenderers[i];
                 correctStarParticle[i] = obj.transform.GetChild(0).gameObject;
                 clonedPrefabs[i] = obj.transform;
             }
         }
 
-        private void HandleFingerDown(Finger touchedFinger)
+        private void Update()
         {
-            if (touchFinger != null) return;
+            // Check for standard Unity touch input (Game mode)
+            if (Input.touchCount > 0)
+            {
+                for (int i = 0; i < Input.touchCount; i++)
+                {
+                    var touch = Input.GetTouch(i);
+                    if (touch.phase == TouchPhase.Began)
+                    {
+                        HandleTouch(touch.position);
+                    }
+                }
+            }
 
-            Vector2 touchPosition = GetTouchWorldPosition(touchedFinger.screenPosition);
+            // Check for mouse input (for desktop)
+            if (Input.GetMouseButtonDown(0))
+            {
+                HandleTouch(Input.mousePosition);
+            }
+        }
 
+        private void HandleTouch(Vector2 screenPosition)
+        {
+            Vector2 touchPosition = GetTouchWorldPosition(screenPosition);
+            HandleTouchLogic(touchPosition);
+        }
+
+        private void HandleTouchLogic(Vector2 touchPosition)
+        {
             for (var index = 0; index < targetObjects.Count; index++)
             {
                 if (UntouchableObjects.Contains(index)) continue;
+
                 var currentTarget = clonedPrefabs[index];
-                if (Vector2.Distance(touchPosition, currentTarget.position) < 1.3f)
+                if (Vector2.Distance(touchPosition, currentTarget.position) < 0.9f)
                 {
                     stayedObjs[index] = 99;
-                    touchFinger = touchedFinger;
                     currentObjectIndex = index;
                     OnCorrectTouch?.Invoke();
                     OnCorrectInvokeIndex?.Invoke(index);
                     correctStarParticle[index].gameObject.SetActive(true);
                     UntouchableObjects.Add(index);
                     var originalScale = currentTarget.localScale;
-                
-                
+
                     currentTarget.DOScale(1.2f, 0.3f).OnComplete(() =>
                     {
                         currentTarget.DOScale(originalScale, 0.3f);
                     });
+
+                    break;
                 }
             }
-
-            touchFinger = null;
         }
 
         private Vector2 GetTouchWorldPosition(Vector2 screenPosition)
         {
             return mainCamera.ScreenToWorldPoint(screenPosition);
+        }
+        
+        private void OnDrawGizmos()
+        {
+            // Visualize the touch interaction area with Gizmos
+            Gizmos.color = Color.green; // Color for the Gizmo circle
+            foreach (var target in clonedPrefabs)
+            {
+                Gizmos.DrawWireSphere(target.position, 0.9f); // Draw a wire sphere with a radius of 1f
+            }
         }
     }
 }
