@@ -56,23 +56,20 @@ namespace com.appidea.MiniGamePlatform.Hidden_Objects.Hidden_Objects.Runtime.Scr
         private void HandleHintObject()
         {
             if(hintIndex >= touchObject.MaxObjectCount) return;
-            ScaleUpAndDown(touchObject.ClonePrefabs[hintIndex].transform);
+            ScaleAndRotate(touchObject.ClonePrefabs[hintIndex].transform);
         }
 
-        private void ScaleUpAndDown(Transform target)
+        private void ScaleAndRotate(Transform target)
         {
             Vector3 originalScale = target.localScale;
-            
-            target.DOScale(originalScale + new Vector3(0.1f, 0.1f, 0.1f), 0.3f).OnComplete(() =>
-            {
-                target.DOScale(originalScale, 0.3f).OnComplete(() =>
-                {
-                    target.DOScale(originalScale + new Vector3(0.1f, 0.1f, 0.1f), 0.3f).OnComplete(() =>
-                    {
-                        target.DOScale(originalScale, 0.3f);
-                    });
-                });
-            });
+
+            DOTween.Sequence()
+                .Append(target.DOScale(originalScale + new Vector3(0.15f, 0.15f, 0.15f), 0.3f))
+                .Join(target.DORotate(new Vector3(0, 0, 15f), 0.3f))
+                .Append(target.DORotate(new Vector3(0, 0, -15f), 0.3f))
+                .Append(target.DORotate(Vector3.zero, 0.3f))
+                .Append(target.DOScale(originalScale, 0.3f))
+                .SetLoops(1, LoopType.Restart);
         }
 
         private void ActivateTimer() => startTimer = true;

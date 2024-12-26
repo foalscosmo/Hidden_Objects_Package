@@ -47,10 +47,10 @@ namespace com.appidea.MiniGamePlatform.Hidden_Objects.Hidden_Objects.Runtime.Scr
             var originalScale = downPanelObjects[index].transform.localScale;
             downPanelObjects[index].transform.DOScale(originalScale * 1.2f, 0.2f).OnComplete(() =>
             {
-                var sr = downPanelObjects[index];
+                var sr = downPanelObjects[index]; 
                 var color = sr.color;
-                color.a = 0.5f;
-                sr.color = color;
+                var targetColor = new Color(color.r, color.g, color.b, 0.5f);
+                DOTween.To(() => sr.color, x => sr.color = x, targetColor, 0.5f);
                 downPanelObjects[index].transform.DOScale(originalScale, 0.2f).OnComplete(() =>
                     { checks[index].SetActive(true); });
             });

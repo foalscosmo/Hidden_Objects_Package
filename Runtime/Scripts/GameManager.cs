@@ -3,6 +3,7 @@ using com.appidea.MiniGamePlatform.CommunicationAPI;
 using UnityEngine;
 using UnityEngine.InputSystem.EnhancedTouch;
 using UnityEngine.UI;
+using Screen = UnityEngine.Device.Screen;
 
 namespace com.appidea.MiniGamePlatform.Hidden_Objects.Hidden_Objects.Runtime.Scripts
 {
@@ -34,6 +35,7 @@ namespace com.appidea.MiniGamePlatform.Hidden_Objects.Hidden_Objects.Runtime.Scr
 
         private void Awake()
         {
+            Application.targetFrameRate = 120;
             SetLevel();
             exitButton.onClick.AddListener(SetFinishOnButton);
         }

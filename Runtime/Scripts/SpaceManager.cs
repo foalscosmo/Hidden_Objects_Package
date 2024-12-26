@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 namespace com.appidea.MiniGamePlatform.Hidden_Objects.Hidden_Objects.Runtime.Scripts
@@ -6,6 +8,7 @@ namespace com.appidea.MiniGamePlatform.Hidden_Objects.Hidden_Objects.Runtime.Scr
     public class SpaceManager : MonoBehaviour
     {
         [SerializeField] private DownPanel bedroomPanel;
+        
         public event Action OnSpaceFinished;
     
         private void OnEnable()

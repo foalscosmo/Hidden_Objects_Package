@@ -32,22 +32,26 @@ namespace com.appidea.MiniGamePlatform.Hidden_Objects.Hidden_Objects.Runtime.Scr
         public int CurrentObjectIndex => currentObjectIndex;
 
         public List<Transform> ClonePrefabs => clonedPrefabs;
+        private readonly List<SpriteRenderer> spriteRenderers = new();
+
 
         private void Awake()
         {
             mainCamera = Camera.main;
+
             for (int i = 0; i < targetObjects.Count; i++)
             {
                 var obj = Instantiate(prefabObject, targetObjects[i].transform.position, quaternion.identity, transform);
-                obj.GetComponent<SpriteRenderer>().sprite = objectSpritesRenderers[i];
+                var spriteRenderer = obj.GetComponent<SpriteRenderer>();
+                spriteRenderer.sprite = objectSpritesRenderers[i];
                 correctStarParticle[i] = obj.transform.GetChild(0).gameObject;
                 clonedPrefabs[i] = obj.transform;
+                spriteRenderers.Add(spriteRenderer);
             }
         }
 
         private void Update()
         {
-            // Check for standard Unity touch input (Game mode)
             if (Input.touchCount > 0)
             {
                 for (int i = 0; i < Input.touchCount; i++)
@@ -60,7 +64,6 @@ namespace com.appidea.MiniGamePlatform.Hidden_Objects.Hidden_Objects.Runtime.Scr
                 }
             }
 
-            // Check for mouse input (for desktop)
             if (Input.GetMouseButtonDown(0))
             {
                 HandleTouch(Input.mousePosition);
@@ -88,14 +91,17 @@ namespace com.appidea.MiniGamePlatform.Hidden_Objects.Hidden_Objects.Runtime.Scr
                     OnCorrectInvokeIndex?.Invoke(index);
                     correctStarParticle[index].gameObject.SetActive(true);
                     UntouchableObjects.Add(index);
-                    var originalScale = currentTarget.localScale;
 
+                    var originalScale = currentTarget.localScale;
+                    var index1 = index;
                     currentTarget.DOScale(1.2f, 0.3f).OnComplete(() =>
                     {
                         currentTarget.DOScale(originalScale, 0.3f);
+                        var spriteRenderer = spriteRenderers[index1];
+                        var color = spriteRenderer.color;
+                        var targetColor = new Color(color.r, color.g, color.b, 150f / 255f);
+                        DOTween.To(() => spriteRenderer.color, x => spriteRenderer.color = x, targetColor, 0.5f);
                     });
-
-                    break;
                 }
             }
         }
